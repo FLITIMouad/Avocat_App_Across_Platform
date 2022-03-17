@@ -1,0 +1,74 @@
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+.AddCLient-title {
+  text-align: center;
+}
+.AddCLient-subtitle {
+  margin-bottom: 20px;
+  text-align: right;
+  span {
+    color: red;
+  }
+}
+.AddCLient-form {
+  padding: 15px;
+  margin-top: 80px;
+  display: flex;
+
+  .AddCLient-inputGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    .AddCLient-inputAndError {
+      height: 80px;
+      p {
+        color: #bf1650;
+        text-align: center;
+      }
+      .AddCLient-input {
+        display: flex;
+        border: 1px solid #cdd9ed;
+        min-height: 35px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        span {
+          border-right: 1px solid #cdd9ed;
+          background-color: #eef4ff;
+          height: 100%;
+          padding: 5px;
+          align-items: center;
+          text-align: center;
+          min-width: 110px;
+          span {
+            color: red;
+            border: none;
+            background-color: transparent;
+            padding: 0;
+          }
+        }
+        input,
+        select {
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          height: 100%;
+          padding: 5px;
+          min-width: 345px;
+          &:focus {
+            outline: none;
+            border: none;
+            border-color: #27e70d;
+          }
+        }
+      }
+    }
+  }
+}

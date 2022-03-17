@@ -1,0 +1,49 @@
+.DataTable-Button {
+  font-weight: bold;
+  margin: 0px 10px;
+  padding: 5px 5px;
+  min-width: 100px;
+  min-height: 32px;
+  i {
+    margin: 0px 5px;
+  }
+  &:hover {
+    color: #fff;
+  }
+}
+
+.DataTable-ClearButton {
+  border-radius: 5px;
+  color: #fff;
+  width: 70px;
+  height: 32px;
+  text-decoration: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 34px;
+  width: 32px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  background-color: #424d59;
+  border-color: #424d59;
+  padding: 0px 20px;
+  font-weight: bold;
+  i {
+    margin: 0px 5px;
+  }
+}
+.DataTable-ClearButton:hover {
+  background-color: #262d35;
+  border: 2px solid #262d35;
+  color: #fff;
+}
+
+.DataTable-FilterBar {
+  display: flex;
+  width: 100%;
+}

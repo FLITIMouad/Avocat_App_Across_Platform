@@ -1,0 +1,64 @@
+.ClientDetail-Container {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  .ClientDetail-Title {
+    color: #000;
+    text-align: center;
+    font-family: "Aref Ruqaa", serif;
+    margin: 40px 0px;
+    font-size: 60px;
+  }
+  .ClientDetail-Info {
+    position: relative;
+    margin: 50px 0px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    .Info-inputGroup {
+      position: relative;
+      display: flex;
+      width: 350px;
+      margin: 20px 40px;
+      height: 40px;
+      border: 1px solid #cfddf7;
+      min-height: 35px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      span {
+        border-right: 1px solid #eef4ff;
+        background-color: #eef4ff;
+        height: 100%;
+        width: 10%;
+        padding: 5px;
+        align-items: center;
+        text-align: center;
+        min-width: 105px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+      input {
+        border-radius: 0px;
+        border: none;
+        outline: none;
+        height: 100%;
+        width: 70%;
+        min-width: 150px;
+        padding: 5px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        &:focus {
+          outline: none;
+          border: none;
+          border-color: #27e70d;
+        }
+      }
+    }
+  }
+}
