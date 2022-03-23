@@ -9,12 +9,9 @@ import ClientDetail from "./pages/ClientDetail";
 import "./assets/scss/MainScreen.scss";
 import TitleBar from "./Components/TitleBar";
 import {
-  BrowserRouter as Router,
-  Switch,
+  HashRouter as Router,
   Route,
-  Link,
   Redirect,
-  useHistory,
 } from "react-router-dom";
 import Sidebar from "./Components/Sidebar2";
 import { useSelector } from "react-redux";

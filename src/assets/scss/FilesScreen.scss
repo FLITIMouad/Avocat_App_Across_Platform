@@ -1,7 +1,25 @@
+@import '../../../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-icons/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-layouts/styles/material.css';
+@import '../../../node_modules/@syncfusion/ej2-grids/styles/material.css';
+@import "../../../node_modules/@syncfusion/ej2-react-filemanager/styles/material.css";
 .Files-Container {
   height: 100%;
   width: 100%;
   position: absolute;
   background-color: #a86140;
   padding: 10px;
+}
+.control-section{
+  width: 100%;
+    padding: 17px;
+    height: 100%;
+    #file{
+      height: 92vh !important;
+    }
 }

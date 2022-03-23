@@ -1,11 +1,12 @@
 {
-  "name": "electron-react-demo",
+  "name": "Avocat",
   "main": "public/electron.js",
   "version": "0.1.0",
   "homepage": "./",
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
     "@popperjs/core": "^2.10.1",
+    "@syncfusion/ej2-react-filemanager": "^19.4.56",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
