@@ -28,6 +28,7 @@ const ClientsScreen = () => {
                   animationDelay={500}
                   size={100}
                   color="#fff"
+                  className="spinner"
                 />
               </div>
             </div>

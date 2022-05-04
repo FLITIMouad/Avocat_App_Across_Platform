@@ -1,11 +1,12 @@
-import { TextField } from "../../data/costumeStyle";
+import { TextField } from "../data/costumeStyle";
 import { Button, DropdownButton, Dropdown } from "react-bootstrap";
 const FilterComponent = ({
     filterText,
     onFilter,
     onClear,
     onExport,
-    onClickAdd,
+  onClickAdd,
+    type
   }) => (
     <>
       <div className="DataTable-FilterBar">
@@ -27,7 +28,7 @@ const FilterComponent = ({
         <Button
           variant="outline-primary"
           className="DataTable-Button"
-          onClick={(e) => onExport(e.target.value)}
+          onClick={onExport}
         >
           <i className="fas fa-download"></i>تحميل البيانات
         </Button>
@@ -36,7 +37,7 @@ const FilterComponent = ({
           className="DataTable-Button"
           onClick={() => onClickAdd(true)}
         >
-          <i className="fas fa-user-plus"></i>إضافة زبون
+        <i className="fas fa-user-plus"></i>{type}
         </Button>
       </div>
     </>

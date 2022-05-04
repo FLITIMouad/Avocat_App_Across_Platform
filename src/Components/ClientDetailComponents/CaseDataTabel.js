@@ -1,17 +1,16 @@
 import DataTable, { createTheme } from "react-data-table-component";
 import "../../assets/scss/Datatable.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, DropdownButton, Dropdown } from "react-bootstrap";
-import differenceBy from "lodash/differenceBy";
-import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { customStyles, TextField } from "../../data/costumeStyle";
+import { customStyles } from "../../data/costumeStyle";
 import FilterComponent from "./FilterComponent";
 import { DeleteClient } from "../../actions/clientsAction.js";
 import { SemipolarSpinner } from "react-epic-spinners";
 import { DELETE_CLIENT_RESET } from "../../constants/clientConstants.js";
 import Tabledata from "../../data/client";
+import {  downloadCSV } from "../../utils";
 
 createTheme("solarized", {
   background: {
@@ -27,44 +26,15 @@ createTheme("solarized", {
   },
 });
 
-function convertArrayOfObjectsToCSV(array) {
-  let result;
-
-  const columnDelimiter = ",";
-  const lineDelimiter = "\n";
-  const keys = Object.keys(array[0]);
-
-  result = "";
-  result += keys.join(columnDelimiter);
-  result += lineDelimiter;
-
-  array.forEach((item) => {
-    let ctr = 0;
-    keys.forEach((key) => {
-      if (ctr > 0) result += columnDelimiter;
-
-      result += item[key];
-
-      ctr++;
-    });
-    result += lineDelimiter;
-  });
-
-  return result;
-}
-
-// Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
 
 const CaseDataTable = () => {
-  //selection-------------------------------------------------------------------------
-  //----------------------------------------------------------------------------------
+  //selection------------------------------------------------------------------------- 
   const [selectedRows, setSelectedRows] = useState([]);
   const [toggleCleared, setToggleCleared] = useState(false);
   const [data, setData] = useState(Tabledata);
+  //----------------------------------------------------------------------------------
 
-  const addElm = (el) => {
-    setData([...data, el]);
-  };
+
   const dispatch = useDispatch();
   const columns = [
     {
@@ -135,6 +105,9 @@ const CaseDataTable = () => {
   ];
   const updatdel = useSelector((states) => states.delClient);
   const { loadingdel, successdel, clientdel, errordel } = updatdel;
+
+
+
   /****************Del Success********************* */
   if (successdel) {
     Swal.fire({
@@ -151,9 +124,22 @@ const CaseDataTable = () => {
   }
 
   /****************Del Error********************* */
+
+
+
+
   if (errordel) {
     /**************Error Message */
   }
+
+
+
+
+
+
+
+
+
   /*********************Delete ***********************/
   const deleteRow = (id, name) => {
     Swal.fire({
@@ -179,11 +165,13 @@ const CaseDataTable = () => {
     });
   };
 
+
   const handleRowSelected = React.useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
 
-  //Filter----------------------------------------------------------------------------
+
+  
   //----------------------------------------------------------------------------------
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
@@ -205,24 +193,41 @@ const CaseDataTable = () => {
         onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
-        onExport={() => downloadCSV(data)}
+        onExport={() => {  downloadCSV(selectedRows) }}
         onClickAdd={() => setAddModalShow(true)}
       />
     );
   }, [filterText, resetPaginationToggle]);
+
+
   //Selection---------------------------------------------------------------------------------
   const contextActions = React.useMemo(() => {
     const handleDelete = () => {
-      if (
-        window.confirm(
-          `Are you sure you want to delete:\r ${selectedRows.map(
-            (r) => r.title
-          )}?`
-        )
-      ) {
-        setToggleCleared(!toggleCleared);
-        setData(differenceBy(data, selectedRows, "title"));
-      }
+
+      Swal.fire({
+        title: `:هل أنت متأكد أنك تريد الحذف\n `,
+        showDenyButton: true,
+        icon: "warning",
+        confirmButtonText: "حذف",
+        denyButtonText: `لا تحذف`,
+        confirmButtonColor: "#d33",
+        denyButtonColor: "#27E70D",
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          selectedRows.forEach((res) => {
+                console.log(res);
+               })
+          //dispatch(DeleteClient(id));
+        } else if (result.isDenied) {
+          Swal.fire({
+            title: `:لم يتم الحذف\n\n `,
+            icon: "error",
+            confirmButtonText: "نعم",
+            confirmButtonColor: "#27e70d",
+          });
+        }
+      });
     };
 
     return (
@@ -238,22 +243,9 @@ const CaseDataTable = () => {
     );
   }, [data, selectedRows, toggleCleared]);
 
+  
   //table-----------------------------------------------------------------------------
-  function downloadCSV(array) {
-    const link = document.createElement("a");
-    let csv = convertArrayOfObjectsToCSV(data);
-    if (csv == null) return;
-
-    const filename = "ClientsList.csv";
-
-    if (!csv.match(/^data:text\/csv/i)) {
-      csv = `data:text/csv;charset=utf-8,${csv}`;
-    }
-
-    link.setAttribute("href", encodeURI(csv));
-    link.setAttribute("download", filename);
-    link.click();
-  }
+ 
   //----------------------------------------------------------------------------------
   const [addModalShow, setAddModalShow] = React.useState(false);
   const [editModalShow, setEditModalShow] = React.useState(false);

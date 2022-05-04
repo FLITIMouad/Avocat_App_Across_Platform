@@ -31,3 +31,7 @@ code {
   background-clip: content-box;
   background-color: #37404a;
 }
+
+.spinner{
+  overflow: hidden;
+}

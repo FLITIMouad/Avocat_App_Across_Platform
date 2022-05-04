@@ -1,19 +1,18 @@
 import DataTable, { createTheme } from "react-data-table-component";
 import "../../assets/scss/Datatable.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, DropdownButton, Dropdown } from "react-bootstrap";
-import differenceBy from "lodash/differenceBy";
-import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import AddClientModal from "./AddClientModal";
 import EditClientModal from "./EditClientModal";
-import { customStyles, TextField } from "../../data/costumeStyle";
-import FilterComponent from "./FilterComponent";
+import { customStyles } from "../../data/costumeStyle";
+import FilterComponent from "../FilterComponent";
 import { DeleteClient } from "../../actions/clientsAction.js";
 import { SemipolarSpinner } from "react-epic-spinners";
 import { DELETE_CLIENT_RESET } from "../../constants/clientConstants.js";
-// import {Tabledata} from "../../data/client.js"
+import { downloadCSV } from "../../utils";
+
 
 createTheme("solarized", {
   background: {
@@ -29,31 +28,7 @@ createTheme("solarized", {
   },
 });
 
-function convertArrayOfObjectsToCSV(array) {
-  let result;
 
-  const columnDelimiter = ",";
-  const lineDelimiter = "\n";
-  const keys = Object.keys(array[0]);
-
-  result = "";
-  result += keys.join(columnDelimiter);
-  result += lineDelimiter;
-
-  array.forEach((item) => {
-    let ctr = 0;
-    keys.forEach((key) => {
-      if (ctr > 0) result += columnDelimiter;
-
-      result += item[key];
-
-      ctr++;
-    });
-    result += lineDelimiter;
-  });
-
-  return result;
-}
 
 // Blatant "inspiration" from https://codepen.io/Jacqueline34/pen/pyVoWr
 
@@ -164,6 +139,8 @@ const Datatable = ({ Tabledata }) => {
   ];
   const updatdel = useSelector((states) => states.delClient);
   const { loadingdel, successdel, clientdel, errordel } = updatdel;
+
+
   /****************Del Success********************* */
   if (successdel) {
     Swal.fire({
@@ -179,10 +156,13 @@ const Datatable = ({ Tabledata }) => {
     dispatch({ type: DELETE_CLIENT_RESET });
   }
 
+
   /****************Del Error********************* */
   if (errordel) {
     /**************Error Message */
   }
+
+
   /*********************Delete ***********************/
   const deleteRow = (id, name) => {
     Swal.fire({
@@ -208,19 +188,26 @@ const Datatable = ({ Tabledata }) => {
     });
   };
 
+
+  //Select Row----------------------------------------------------------------------------
   const handleRowSelected = React.useCallback((state) => {
+    console.log("RowSelected",state.selectedRows)
     setSelectedRows(state.selectedRows);
   }, []);
 
-  //Filter----------------------------------------------------------------------------
   //----------------------------------------------------------------------------------
-  const [filterText, setFilterText] = React.useState("");
-  const [resetPaginationToggle, setResetPaginationToggle] =
-    React.useState(false);
+  const [filterText, setFilterText] = useState("");
+
+
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  
+
   const filteredItems = data.filter(
     (item) =>
       item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
   );
+
+
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -234,24 +221,54 @@ const Datatable = ({ Tabledata }) => {
         onFilter={(e) => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
-        onExport={() => downloadCSV(data)}
+        onExport={() => {
+          selectedRows.map((r) => console.log(r));
+          console.log("selected ",selectedRows.length);
+          if (selectedRows.length>0)
+          {
+            downloadCSV(selectedRows)
+            }
+           
+          else
+          Swal.fire({
+            title: `:يجب عليك اختيار العملاء`,
+            icon: "info",
+            confirmButtonText: "! حسنا",
+            confirmButtonColor: "#27e70d",
+          });
+        }}
         onClickAdd={() => setAddModalShow(true)}
+        type="إضافة زبون"
       />
     );
   }, [filterText, resetPaginationToggle]);
   //Selection---------------------------------------------------------------------------------
   const contextActions = React.useMemo(() => {
     const handleDelete = () => {
-      if (
-        window.confirm(
-          `Are you sure you want to delete:\r ${selectedRows.map(
-            (r) => r.title
-          )}?`
-        )
-      ) {
-        setToggleCleared(!toggleCleared);
-        setData(differenceBy(data, selectedRows, "title"));
-      }
+      Swal.fire({
+        title: `:هل أنت متأكد أنك تريد الحذف\n `,
+        showDenyButton: true,
+        icon: "warning",
+        confirmButtonText: "حذف",
+        denyButtonText: `لا تحذف`,
+        confirmButtonColor: "#d33",
+        denyButtonColor: "#27E70D",
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          selectedRows.forEach((res) => {
+                console.log(res);
+               })
+          //dispatch(DeleteClient(id));
+        } else if (result.isDenied) {
+          Swal.fire({
+            title: `:لم يتم الحذف\n\n `,
+            icon: "error",
+            confirmButtonText: "نعم",
+            confirmButtonColor: "#27e70d",
+          });
+        }
+      });
     };
 
     return (
@@ -267,22 +284,7 @@ const Datatable = ({ Tabledata }) => {
     );
   }, [data, selectedRows, toggleCleared]);
 
-  //table-----------------------------------------------------------------------------
-  function downloadCSV(array) {
-    const link = document.createElement("a");
-    let csv = convertArrayOfObjectsToCSV(data);
-    if (csv == null) return;
 
-    const filename = "ClientsList.csv";
-
-    if (!csv.match(/^data:text\/csv/i)) {
-      csv = `data:text/csv;charset=utf-8,${csv}`;
-    }
-
-    link.setAttribute("href", encodeURI(csv));
-    link.setAttribute("download", filename);
-    link.click();
-  }
   //----------------------------------------------------------------------------------
   const [addModalShow, setAddModalShow] = React.useState(false);
   const [editModalShow, setEditModalShow] = React.useState(false);
