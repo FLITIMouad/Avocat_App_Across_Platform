@@ -56,6 +56,8 @@ const LoginScreen = () => {
           <input
             {...register("Password", { required: "هذه الخانة ضرورية" })}
             id="Password"
+             type="password"
+             
             className="login-input"
             placeholder="كلمة السر"
           />
